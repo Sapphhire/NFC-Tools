@@ -11,14 +11,15 @@ import com.example.nfctools01.page.WritePageWindows.AddCommitWindows
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.background
+import com.example.nfctools01.page.WritePageWindows.TextInputWindow
 
 @Composable
 fun WritePage() {
-    var showAddCommitWindow by remember { mutableStateOf(false) }
+    var showAddCommitWindow by remember { mutableStateOf(false) } //这是AddCW窗口
+    var showTextInputWindow by remember { mutableStateOf(false) } //这是Text窗口
 
-
-    // 存储记录的列表（初始为空）
-    var records by remember { mutableStateOf<List<String>>(emptyList()) }
+    val records = remember { mutableStateListOf<Pair<String, String>>() }
+    // 这是记录列表窗口，内记录包括内容String和记录类型String
 
     // 添加记录按钮点击事件
     val onAddRecordClick = {
@@ -55,8 +56,8 @@ fun WritePage() {
                     Text(text = "暂无记录", style = MaterialTheme.typography.bodyLarge)
                 } else {
                     // 渲染记录列表
-                    records.forEach {
-                        Text(text = it)
+                    records.forEach { (type, content) ->
+                        Text(text = "$type: $content")
                     }
                 }
             }
@@ -72,14 +73,30 @@ fun WritePage() {
             ) {
                 AddCommitWindows(
                     onSelectText = {
-                        // 选择文本时，可以跳转到写入文本页面
-                        println("Text selected")
-                        // 关闭当前 AddCommitWindows
-                        showAddCommitWindow = false
+                        showAddCommitWindow = false// 关闭当前窗口
+                        showTextInputWindow = true // 切换到“写入文本”窗口
                     },
                     onDismiss = {
-                        // 取消窗口，关闭 AddCommitWindows
-                        showAddCommitWindow = false
+                        showAddCommitWindow = false// 按到取消则关闭当前窗口
+                    }
+                )
+            }
+        }
+        // 显示“写入文本”窗口
+        if (showTextInputWindow) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f)),
+                contentAlignment = Alignment.Center
+            ) {
+                TextInputWindow(
+                    onConfirm = { text ->
+                        records.add("文本" to text) // 添加记录
+                        showTextInputWindow = false
+                    },
+                    onCancel = {
+                        showTextInputWindow = false
                     }
                 )
             }

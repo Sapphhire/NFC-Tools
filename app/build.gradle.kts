@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt") // 添加Kapt插件，用于支持room数据库
 }
 
 android {
@@ -47,6 +48,7 @@ android {
 }
 
 dependencies {
+    
 
     implementation("androidx.compose.material3:material3:1.2.0")
     implementation("androidx.core:core-ktx:1.9.0")
@@ -56,6 +58,13 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    
+    // 关于room数据库的添加
+    implementation("androidx.room:room-runtime:2.5.0")
+    kapt("androidx.room:room-compiler:2.5.0")
+    implementation("androidx.room:room-ktx:2.5.0")
+    testImplementation("androidx.room:room-testing:2.5.0")
+
     
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
